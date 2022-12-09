@@ -2,6 +2,7 @@ from src.DNASequence import DNASequence
 from src.Transcript import Transcript, NotAValidTranscript
 from src.Plasmid import Plasmid
 from typing import List
+from constants import promoter_sequence, terminator_sequence
 
 
 class Gene:
@@ -9,14 +10,16 @@ class Gene:
         self._plasmid = plasmid
         self._start_pos = start_pos
         self._end_pos = end_pos
-        self._sequence = DNASequence(plasmid.get_record().get_sequence()[start_pos:end_pos])
+        self._coding_sequence_start_pos = start_pos + len(promoter_sequence)
+        self._coding_sequence_end_pos = end_pos - len(terminator_sequence)
+        self._coding_sequence = DNASequence(plasmid.get_record().get_sequence()[
+                                            self._coding_sequence_start_pos:self._coding_sequence_end_pos])
 
-    def get_sequence(self) -> DNASequence:
-        return self._sequence
+    def get_coding_sequence(self) -> DNASequence:
+        return self._coding_sequence
 
     def __eq__(self, other):
-        return (self._plasmid, self._start_pos, self._end_pos, self._sequence) == \
-               (other._plasmid, other._start_pos, other._end_pos, other._sequence)
+        return (self._plasmid, self._start_pos, self._end_pos) == (other._plasmid, other._start_pos, other._end_pos)
 
     def __str__(self):
         return f"{self._plasmid}[{self._start_pos}:{self._end_pos}]"

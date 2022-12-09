@@ -1,7 +1,6 @@
 from src.Gene import Gene
 from src.ProteinSequence import ProteinSequence
 
-
 class NotAValidTranscript(Exception):
     pass
 
@@ -18,24 +17,26 @@ class Transcript:
         assert frame_is_valid, f"Error when building transcript, invalid frame: {frame}"
 
         if reverse:
-            dna_sequence = gene.get_sequence().get_rc()
+            dna_sequence = gene.get_coding_sequence().get_rc()
         else:
-            dna_sequence = gene.get_sequence()
+            dna_sequence = gene.get_coding_sequence()
         dna_sequence = dna_sequence.shift(frame)
         protein_sequence = ProteinSequence(dna_sequence)
 
-        first_start_codon = protein_sequence.get_first_pos_of_aminoacid("M")
-        last_stop_codon = protein_sequence.get_last_pos_of_aminoacid("_")
-        self.protein_sequence = protein_sequence.substr(first_start_codon, last_stop_codon + 1)
+        first_start_codon_pos = protein_sequence.get_first_pos_of_aminoacid("M")
+        last_stop_codon_pos = protein_sequence.get_last_pos_of_aminoacid("_")
 
-        if not self.is_a_valid_transcript():
+        if Transcript.start_and_stop_codons_are_invalid(first_start_codon_pos, last_stop_codon_pos):
             raise NotAValidTranscript()
 
-    def is_a_valid_transcript(self) -> bool:
-        is_not_empty = len(self.protein_sequence) > 0
-        starts_with_start_codon = self.protein_sequence.get_sequence()[0] == 'M'
-        ends_with_stop_codon = self.protein_sequence.get_sequence()[-1] == '_'
-        return is_not_empty and starts_with_start_codon and ends_with_stop_codon
+        self.protein_sequence = protein_sequence.substr(first_start_codon_pos, last_stop_codon_pos + 1)
+
+    @staticmethod
+    def start_and_stop_codons_are_invalid(start_codon_pos: int, stop_codon_pos: int) -> bool:
+        there_is_no_start_codon = start_codon_pos == -1
+        there_is_no_stop_codon = stop_codon_pos == -1
+        start_codon_appears_after_stop_codon = start_codon_pos > stop_codon_pos
+        return there_is_no_start_codon or there_is_no_stop_codon or start_codon_appears_after_stop_codon
 
     def has_PTC(self) -> bool:
         return self.protein_sequence.get_count_of_AA("_") > 1

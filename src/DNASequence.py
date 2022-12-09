@@ -16,9 +16,6 @@ class DNASequence:
         if not sequence_is_only_formed_of_ACGT:
             raise InvalidSequence("Invalid sequence detected, ACGT only allowed")
 
-    def __eq__(self, other):
-        return self._sequence == other._sequence
-
     def get_sequence(self) -> str:
         return self._sequence
 
