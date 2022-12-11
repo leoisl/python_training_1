@@ -24,7 +24,9 @@ class ProteinSequence:
         protein = ""  # TODO: string concatenation in python is inefficient. Find out why and how to improve.
         for i in range(0, len(dna_sequence), 3):
             codon = dna_sequence[i:i + 3]
-            protein += translation_table[codon]
+            is_full_codon = len(codon) == 3
+            if is_full_codon:
+                protein += translation_table[codon]
         return protein
 
     def __init__(self, sequence: DNASequence):

@@ -1,23 +1,12 @@
-class InvalidSequence(Exception):
-    pass
-
 class DNASequence:
     def __init__(self, sequence: str):
-        self._sequence = sequence.upper()
-
-        # Note: in object orientation, we should check for consistency in constructors.
-        # Constructors should build consistent (i.e. valid) objects, and throughout the lifetime of the object,
-        # they have to remain valid.
-        sequence_is_only_formed_of_ACGT = self._sequence.count("A") + \
-                                          self._sequence.count("C") + \
-                                          self._sequence.count("G") + \
-                                          self._sequence.count("T") == len(self._sequence)
-
-        if not sequence_is_only_formed_of_ACGT:
-            raise InvalidSequence("Invalid sequence detected, ACGT only allowed")
+        self._sequence = sequence
 
     def get_sequence(self) -> str:
         return self._sequence
+
+    def __eq__(self, other):
+        return self._sequence == other._sequence
 
     def get_rc(self) -> "DNASequence":
         """
@@ -34,3 +23,6 @@ class DNASequence:
         :param amount: Amount of bases to shift
         """
         return DNASequence(self._sequence[amount:])
+
+    def __str__(self):
+        return self.get_sequence()

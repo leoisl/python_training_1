@@ -1,4 +1,3 @@
-from src.Gene import Gene
 from src.ProteinSequence import ProteinSequence
 
 class NotAValidTranscript(Exception):
@@ -6,7 +5,7 @@ class NotAValidTranscript(Exception):
 
 
 class Transcript:
-    def __init__(self, gene: Gene, reverse: bool, frame: int):
+    def __init__(self, gene, reverse: bool, frame: int):
         """
         Builds a transcript given a gene and a frame.
         :param gene: the gene itself
@@ -30,6 +29,10 @@ class Transcript:
             raise NotAValidTranscript()
 
         self.protein_sequence = protein_sequence.substr(first_start_codon_pos, last_stop_codon_pos + 1)
+
+    @staticmethod
+    def build(gene, reverse: bool, frame: int):
+        return Transcript(gene, reverse, frame)
 
     @staticmethod
     def start_and_stop_codons_are_invalid(start_codon_pos: int, stop_codon_pos: int) -> bool:
