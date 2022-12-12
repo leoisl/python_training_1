@@ -13,9 +13,9 @@ def main():
         print(f"Processing plasmid {plasmid}")
         for gene in plasmid.get_genes():
             if gene.is_expressed():
-                print(f"{gene} can be expressed")
+                print(f"Gene {gene} can be expressed")
             else:
-                print(f"{gene} will NOT be expressed")
+                print(f"Gene {gene} will NOT be expressed")
 
 if __name__ == "__main__":
     main()
