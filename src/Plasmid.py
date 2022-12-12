@@ -13,6 +13,9 @@ class Plasmid:
     def __str__(self):
         return self._record.get_comment()
 
+    def __repr__(self):
+        return str(self)
+
     def get_record(self) -> FastaRecord:
         return self._record
 

@@ -3,7 +3,7 @@ from src.FastaFile import FastaFile
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Parse a fasta file and output NMD genes from plasmid sequences.')
+    parser = argparse.ArgumentParser(description='Parse a fasta file and output which genes can be expressed from plasmid sequences.')
     parser.add_argument('fasta_file', help='The fasta file to be parsed')
     args = parser.parse_args()
 

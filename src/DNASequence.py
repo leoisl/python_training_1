@@ -26,3 +26,6 @@ class DNASequence:
 
     def __str__(self):
         return self.get_sequence()
+
+    def __repr__(self):
+        return str(self)

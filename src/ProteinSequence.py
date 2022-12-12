@@ -41,11 +41,17 @@ class ProteinSequence:
     def get_last_pos_of_aminoacid(self, aminoacid: str) -> int:
         return self._sequence.rfind(aminoacid)
 
-    def substr(self, first_pos, last_pos):
-        return self._sequence[first_pos:last_pos]
+    def trim(self, first_pos, last_pos):
+        self._sequence = self._sequence[first_pos:last_pos]
+
+    def get_count_of_aminoacid(self, aminoacid: str) -> int:
+        return self._sequence.count(aminoacid)
 
     def __len__(self):
         return len(self._sequence)
 
     def __str__(self):
         return self._sequence
+
+    def __repr__(self):
+        return str(self)

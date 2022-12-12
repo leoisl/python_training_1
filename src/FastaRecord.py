@@ -16,3 +16,9 @@ class FastaRecord:
 
     def get_comment(self) -> str:
         return self._comment
+
+    def __str__(self):
+        return f"{self.get_comment()}\n{self.get_sequence()}"
+
+    def __repr__(self):
+        return str(self)

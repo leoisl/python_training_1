@@ -20,15 +20,15 @@ class Transcript:
         else:
             dna_sequence = gene.get_coding_sequence()
         dna_sequence = dna_sequence.shift(frame)
-        protein_sequence = ProteinSequence(dna_sequence)
+        self.protein_sequence = ProteinSequence(dna_sequence)
 
-        first_start_codon_pos = protein_sequence.get_first_pos_of_aminoacid("M")
-        last_stop_codon_pos = protein_sequence.get_last_pos_of_aminoacid("_")
+        first_start_codon_pos = self.protein_sequence.get_first_pos_of_aminoacid("M")
+        last_stop_codon_pos = self.protein_sequence.get_last_pos_of_aminoacid("_")
 
         if Transcript.start_and_stop_codons_are_invalid(first_start_codon_pos, last_stop_codon_pos):
             raise NotAValidTranscript()
 
-        self.protein_sequence = protein_sequence.substr(first_start_codon_pos, last_stop_codon_pos + 1)
+        self.protein_sequence.trim(first_start_codon_pos, last_stop_codon_pos + 1)
 
     @staticmethod
     def build(gene, reverse: bool, frame: int):
@@ -42,4 +42,10 @@ class Transcript:
         return there_is_no_start_codon or there_is_no_stop_codon or start_codon_appears_after_stop_codon
 
     def has_PTC(self) -> bool:
-        return self.protein_sequence.get_count_of_AA("_") > 1
+        return self.protein_sequence.get_count_of_aminoacid("_") > 1
+
+    def __str__(self):
+        return str(self.protein_sequence)
+
+    def __repr__(self):
+        return str(self)
