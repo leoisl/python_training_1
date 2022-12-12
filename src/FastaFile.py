@@ -12,18 +12,18 @@ class FastaFile:
         with open(fasta_filepath) as fasta_file:
             all_lines = fasta_file.readlines()
             all_lines = list(map(str.strip, all_lines))
-        self.all_records = []
+        self._all_records: List[FastaRecord] = []
         for comment, sequence in zip(all_lines[::2], all_lines[1::2]):
             record = FastaRecord(comment, DNASequence(sequence))
-            self.all_records.append(record)
+            self._all_records.append(record)
 
     def get_all_plasmids(self) -> List[Plasmid]:
         all_plasmids = []
-        for record in self.all_records:
+        for record in self._all_records:
             if record.is_plasmid():
                 plasmid = Plasmid(record)
                 all_plasmids.append(plasmid)
         return all_plasmids
 
     def __repr__(self):
-        return f"Fasta file with {len(self.all_records)} records"
+        return f"Fasta file with {len(self._all_records)} records"

@@ -5,7 +5,7 @@ class NotAValidTranscript(Exception):
 
 
 class Transcript:
-    def __init__(self, gene, reverse: bool, frame: int):
+    def __init__(self, gene: "Gene", reverse: bool, frame: int):
         """
         Builds a transcript given a gene and a frame.
         :param gene: the gene itself
@@ -20,32 +20,32 @@ class Transcript:
         else:
             dna_sequence = gene.get_coding_sequence()
         dna_sequence = dna_sequence.shift(frame)
-        self.protein_sequence = ProteinSequence(dna_sequence)
+        self._protein_sequence = ProteinSequence(dna_sequence)
 
-        first_start_codon_pos = self.protein_sequence.get_first_pos_of_aminoacid("M")
-        last_stop_codon_pos = self.protein_sequence.get_last_pos_of_aminoacid("_")
+        first_start_codon_pos = self._protein_sequence.get_first_pos_of_aminoacid("M")
+        last_stop_codon_pos = self._protein_sequence.get_last_pos_of_aminoacid("_")
 
-        if Transcript.start_and_stop_codons_are_invalid(first_start_codon_pos, last_stop_codon_pos):
+        if Transcript._start_and_stop_codons_are_invalid(first_start_codon_pos, last_stop_codon_pos):
             raise NotAValidTranscript()
 
-        self.protein_sequence.trim(first_start_codon_pos, last_stop_codon_pos + 1)
+        self._protein_sequence.trim(first_start_codon_pos, last_stop_codon_pos + 1)
 
     @staticmethod
     def build(gene, reverse: bool, frame: int):
         return Transcript(gene, reverse, frame)
 
     @staticmethod
-    def start_and_stop_codons_are_invalid(start_codon_pos: int, stop_codon_pos: int) -> bool:
+    def _start_and_stop_codons_are_invalid(start_codon_pos: int, stop_codon_pos: int) -> bool:
         there_is_no_start_codon = start_codon_pos == -1
         there_is_no_stop_codon = stop_codon_pos == -1
         start_codon_appears_after_stop_codon = start_codon_pos > stop_codon_pos
         return there_is_no_start_codon or there_is_no_stop_codon or start_codon_appears_after_stop_codon
 
     def has_PTC(self) -> bool:
-        return self.protein_sequence.get_count_of_aminoacid("_") > 1
+        return self._protein_sequence.get_count_of_aminoacid("_") > 1
 
     def __str__(self):
-        return str(self.protein_sequence)
+        return str(self._protein_sequence)
 
     def __repr__(self):
         return str(self)

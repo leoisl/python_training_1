@@ -5,7 +5,7 @@ from src.constants import promoter_sequence, terminator_sequence
 
 
 class Gene:
-    def __init__(self, plasmid, start_pos: int, end_pos: int):
+    def __init__(self, plasmid: "Plasmid", start_pos: int, end_pos: int):
         self._plasmid = plasmid
         self._start_pos = start_pos
         self._end_pos = end_pos

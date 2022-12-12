@@ -1,0 +1,66 @@
+@startuml classes
+set namespaceSeparator none
+
+class "DNASequence" as src.DNASequence.DNASequence {
+  _sequence : str
+  __init__(sequence: str)
+  get_rc() -> 'DNASequence'
+  get_sequence() -> str
+  shift(amount: int)
+}
+class "FastaFile" as FastaFile.FastaFile {
+  _all_records : List[FastaRecord]
+  __init__(fasta_filepath: Path)
+  get_all_plasmids() -> List[Plasmid]
+}
+
+class "FastaRecord" as src.FastaRecord.FastaRecord {
+  _comment : str
+  _sequence : DNASequence
+  __init__(comment: str, sequence: DNASequence)
+  get_comment() -> str
+  get_sequence() -> DNASequence
+  is_plasmid() -> bool
+}
+class "Gene" as Gene.Gene {
+  _plasmid : Plasmid
+  _end_pos : int
+  _start_pos : int
+  __init__(plasmid: Plasmid, start_pos: int, end_pos: int)
+  _get_transcripts() -> List[Transcript]
+  get_coding_sequence() -> DNASequence
+  is_expressed() -> bool
+}
+
+class "Plasmid" as Plasmid.Plasmid {
+  _record: FastaRecord
+  __init__(record: FastaRecord)
+  get_genes() -> List[Gene]
+  get_record() -> FastaRecord
+}
+
+class "ProteinSequence" as src.ProteinSequence.ProteinSequence {
+  _sequence : str
+  __init__(sequence: DNASequence)
+  get_count_of_aminoacid(aminoacid: str) -> int
+  get_first_pos_of_aminoacid(aminoacid: str) -> int
+  get_last_pos_of_aminoacid(aminoacid: str) -> int
+  get_sequence() -> str
+  trim(first_pos: int, last_pos: int)
+}
+class "Transcript" as Transcript.Transcript {
+  _protein_sequence: ProteinSequence
+  __init__(gene: Gene, reverse: bool, frame: int)
+  has_PTC() -> bool
+}
+
+src.DNASequence.DNASequence --* src.FastaRecord.FastaRecord : _sequence
+src.DNASequence.DNASequence -> src.ProteinSequence.ProteinSequence : constructor
+Plasmid.Plasmid --* Gene.Gene : _plasmid
+Plasmid.Plasmid -> Gene.Gene : get_genes()
+src.FastaRecord.FastaRecord --* Plasmid.Plasmid : _record
+src.ProteinSequence.ProteinSequence --* Transcript.Transcript : protein_sequence
+src.FastaRecord.FastaRecord --* FastaFile.FastaFile : _all_records
+FastaFile.FastaFile --> Plasmid.Plasmid : get_all_plasmids()
+Gene.Gene --> Transcript.Transcript : _get_transcripts()
+@enduml
