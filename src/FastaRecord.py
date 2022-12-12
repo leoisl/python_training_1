@@ -5,9 +5,6 @@ class FastaRecord:
         self._comment = comment
         self._sequence = sequence
 
-    def __eq__(self, other):
-        return (self._comment, self._sequence) == (other._comment, other._sequence)
-
     def is_plasmid(self) -> bool:
         return "plasmid" in self._comment or "plm" in self._comment
 

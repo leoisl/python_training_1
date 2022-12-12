@@ -7,9 +7,6 @@ class Plasmid:
     def __init__(self, record: FastaRecord):
         self._record = record
 
-    def __eq__(self, other):
-        return self._record == other._record
-
     def __str__(self):
         return self._record.get_comment()
 

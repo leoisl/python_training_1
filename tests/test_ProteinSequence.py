@@ -39,46 +39,50 @@ class TestProteinSequence(TestCase):
         expected = "TG"
         self.assertEqual(str(actual), expected)
 
+    def test___constructor___complex(self):
+        actual = ProteinSequence(DNASequence("TGGTATCGATCATTATCTAGTCAGTCGTAGTCAGCGATGCAT"))
+        expected = "WYRSLSSQS_SAMH"
+        self.assertEqual(str(actual), expected)
+
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_first_pos_of_aminoacid___not_found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence("hello!"))
         actual_pos = sequence.get_first_pos_of_aminoacid("I")
         expected_pos = -1
-        translate_mock.assert_called_once_with("ACGT")
+        translate_mock.assert_called_once_with("hello!")
         self.assertEqual(actual_pos, expected_pos)
 
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_first_pos_of_aminoacid___found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence(""))
         actual_pos = sequence.get_first_pos_of_aminoacid("P")
         expected_pos = 1
         self.assertEqual(actual_pos, expected_pos)
 
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_first_pos_of_aminoacid___last_aminoacid___found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence(""))
         actual_pos = sequence.get_first_pos_of_aminoacid("_")
         expected_pos = 8
         self.assertEqual(actual_pos, expected_pos)
 
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_last_pos_of_aminoacid___not_found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence(""))
         actual_pos = sequence.get_last_pos_of_aminoacid("I")
         expected_pos = -1
-        translate_mock.assert_called_once_with("ACGT")
         self.assertEqual(actual_pos, expected_pos)
 
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_last_pos_of_aminoacid___found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence(""))
         actual_pos = sequence.get_last_pos_of_aminoacid("P")
         expected_pos = 7
         self.assertEqual(actual_pos, expected_pos)
 
     @patch.object(ProteinSequence, "_translate", return_value="MPYYRPPP_")
     def test___get_last_pos_of_aminoacid___first_aminoacid___found(self, translate_mock):
-        sequence = ProteinSequence(DNASequence("ACGT"))
+        sequence = ProteinSequence(DNASequence(""))
         actual_pos = sequence.get_last_pos_of_aminoacid("M")
         expected_pos = 0
         self.assertEqual(actual_pos, expected_pos)
