@@ -40,7 +40,4 @@ class Gene:
 
     def is_expressed(self) -> bool:
         transcripts = self._get_transcripts()
-        for transcript in transcripts:
-            if not transcript.has_PTC():
-                return True
-        return False
+        return any(not transcript.has_PTC() for transcript in transcripts)
